@@ -2,6 +2,7 @@ import {Request, Response} from 'express';
 import { getRepository } from 'typeorm';
 
 import { User } from '../../models/User';
+import { Role } from '../../models/Role';
 
 class UserController {
 
@@ -36,10 +37,56 @@ class UserController {
     const user = await repository.findOne({id});
 
     if(!user){
-      return res.status(404).send({ message:"usuário nao encontrado" })
+      return res.status(404).send({ message:"usuário não encontrado" })
     }
 
     return res.status(200).json(user);
+  }
+
+  async addRole(req: Request, res: Response){
+    try {
+      const repositoryUser = getRepository(User);
+      const repositoryRole = getRepository(Role);
+      const { userId, rolesId} = req.body;
+
+      var id = userId;
+      const user = await repositoryUser.findOne({where: {id}});
+
+      const existRelation = user.roles.find(role => role.id === rolesId)
+      if(existRelation){
+        return res.sendStatus(409);
+      }else{
+        id = rolesId
+        const role = await repositoryRole.findOne({where: {id}});
+        user.roles = [role]
+
+        await repositoryUser.save(user);
+
+        return res.json({message: "Ok"});
+      }
+      
+    }catch(err){
+      return res.sendStatus(409).json({message: "Algo deu errado!"});
+    }
+
+  }
+
+  async removeRole(req: Request, res: Response){
+    try {
+      const repositoryUser = getRepository(User);
+
+      const { userId, rolesId} = req.body;
+      var id = userId;
+      const user = await repositoryUser.findOne({where: {id}});
+
+      user.roles = user.roles.filter(role => role.id !== rolesId)
+      
+      await repositoryUser.save(user);
+
+      return res.json({message: "Ok"})
+    }catch(err){
+      return res.sendStatus(409).json({message: "Algo deu errado!"});
+    }
   }
 }
 

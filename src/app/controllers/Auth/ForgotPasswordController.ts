@@ -16,7 +16,7 @@ class ForgotPassword {
       const user = await repository.findOne({where: {email}});
 
       if(!user){
-        return res.sendStatus(409).json({message: "e-mail nao encontrado"});
+        return res.sendStatus(409).json({message: "e-mail não encontrado"});
       }
 
       const newPassword = crypto.randomBytes(8).toString("hex");
@@ -29,7 +29,7 @@ class ForgotPassword {
       });
 
       if(!sendEmail){
-        return res.json({message: "nao foi possível enviar o email"});
+        return res.json({message: "não foi possível enviar o email"});
       }
 
       const password = await bcrypt.hash(newPassword, 8);

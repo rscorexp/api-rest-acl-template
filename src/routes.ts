@@ -34,6 +34,14 @@ router.post('/post/create', authMiddleware, permissionMiddleware("create_post"),
 //CRIA ROLE
 router.post('/acl/role', RoleController.store);
 router.get('/acl/roles', RoleController.index);
+//ADICIONA PERMISSAO NOS CARGO
+router.post('/acl/role/add/permission', RoleController.AddPermission);
+//DELETA A PERMISSAO DO CARGO 
+router.post('/acl/role/delete/permission', RoleController.DeletePermission);
+//ADICIONA CARGO NO USUARIO
+router.post('/acl/user/add/role', UserController.addRole);
+//REMOVE O CARGO DO USUARIO
+router.post('/acl/user/remove/role', UserController.removeRole);
 
 //CRIAR PERMISSÃO
 router.post('/acl/permission', PermissionController.store);

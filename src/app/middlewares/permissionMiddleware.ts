@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from 'express';
-import { getRepository, getConnection } from 'typeorm';
+import { getConnection } from 'typeorm';
 
 import {User} from '../models/User';
 import {Role} from '../models/Role';

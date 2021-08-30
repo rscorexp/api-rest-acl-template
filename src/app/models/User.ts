@@ -25,7 +25,7 @@ export class User {
   @Column("timestamp")
   updated_at: Date;
   
-  @ManyToMany(type => Role)
+  @ManyToMany(type => Role, {eager: true})
   @JoinTable()
   roles: Role[];
 
